@@ -1,0 +1,45 @@
+記得要install react-route-dom
+index.js 是不能夠失去的
+function 名字一定要大寫
+
+npm run start:frontend
+要小心空格
+
+backend
+npm init
+
+npm run start: backend
+ "start:backend": "nodemon server.js"
+ npm i josonwebtoken
+
+
+
+react
+ <ChatInput
+         user={user}
+         clickedUser={clickedUser} getUserMessages={getUsersMessages} getClickedUsersMessages={getClickedUsersMessages}/>
+         1.沒有兩個<ChatInput><ChatInput>
+
+         2.記得return 要加<> 和</>
+
+         3.function 可以在頭或尾巴做export
+
+         4.import { useState } from 'react'
+
+         5. import  Token from './token'//export default function Token() {
+          一定要大寫
+
+          6.export default function Token({signUp}) {
+           7.記得這裏面要傳入參數
+
+          7. frontend 要Install axios 
+          8.npm i react-cookie
+          9.http://localhost:8000/
+          10. npm i axios
+          11.taskkill /im node.exe /F
+
+  
+
+backend 
+如何向數據庫傳送數據
+1.   await axios.post('localhost:8000',{username,password})
