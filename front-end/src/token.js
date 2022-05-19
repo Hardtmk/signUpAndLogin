@@ -24,7 +24,7 @@ const handleSubmit= async(e)=>{
   // }
 // 這個應該是for登記用的吧
  const response =await axios.get("http://localhost:8000")
-console.log('response='+response)
+console.log('response='+response.data.data[0].username)
   
 }catch(error){
   console.log(error)
@@ -64,6 +64,7 @@ console.log('response='+response)
 }
 <input className='submit' type='submit'/>
 </form>
+<div></div>
     </div>
   )
 }
