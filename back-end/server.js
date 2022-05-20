@@ -3,18 +3,20 @@ const port = 8000
 const connectDB=require('./db/connect')
 const schema = require('./model/schema')
 require('dotenv').config();
-const cors = require('cors')
-const app = express()
-app.use(cors())
-app.use(express.urlencoded({extended: true}));
-app.use(express.json())
+
+
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
-
+const {v4: uuidv4} = require('uuid')
+const cors = require('cors')
+const app = express()
+app.use(express.urlencoded({extended: true}));
+app.use(express.json())
+app.use(cors())
 app.post('/',async(req,res)=>{
   const {username,password}=req.body
   const hashedPassword = await bcrypt.hash(password,10)
-
+  const generatedUserId = uuidv4()
  try{
 const haveUsername = await schema.findOne({username})
 
@@ -26,11 +28,13 @@ if(haveUsername){
  password:hashedPassword
    }
 const insertData = await schema.create(data)
+console.log('insertData='+insertData)
 
-// const token = jwt.sign(insertData,username,{
-//   expiresIn:60*24
-// })
-res.status(201).json({insertData})
+     const token = jwt.sign(insertData.toJSON(), username, {
+            expiresIn: '120s'
+        })
+        console.log('token='+token)
+    res.status(201).json({token, userId: generatedUserId})
 
  }catch(error){
   console.log(error)
