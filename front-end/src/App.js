@@ -1,5 +1,7 @@
 import {BrowserRouter,Routes,Route} from 'react-router-dom'
 import Home from './Home';
+import Page from './page';
+
 
 
 function App() {
@@ -9,6 +11,7 @@ function App() {
     <Routes>
 
   <Route path="/" element={<Home/>}/>
+  <Route path='/page' element={<Page/>}/>
 
   .
 

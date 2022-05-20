@@ -36,9 +36,27 @@ react
           8.npm i react-cookie
           9.http://localhost:8000/
           10. npm i axios
-          11.taskkill /im node.exe /F
+          11.taskkill /im node.exe /
+          12.schema 裏面的property要跟透過axios 傳入的property 是一樣的
+ const response =await axios.post("http://localhost:8000",{username,password})
+  const LoginSchema = new mongoose.Schema({
+  username: {
+    type: String,
+  },
+  password: {
+    type: String,
+  },
+})
 
-  
+        13. npm i react-cookie
+
+        14. file不一定要大寫的名字， 可以page.js 
+
+        15. import Page from './page';//export default Page 一定要大寫
+
+        16. const navigate = useNavigate()
+        
+
 
 backend 
 如何向數據庫傳送數據
