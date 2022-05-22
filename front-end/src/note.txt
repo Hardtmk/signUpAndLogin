@@ -12,6 +12,10 @@ npm run start: backend
  "start:backend": "nodemon server.js"
  npm i josonwebtoken
 
+要加括號
+const token = jwt.sign({id,username}, process.env.JWT_SECRET,{expiresIn:'30d',})
+
+
 
 
 react
@@ -55,7 +59,7 @@ react
         15. import Page from './page';//export default Page 一定要大寫
 
         16. const navigate = useNavigate()
-        
+
 
 
 backend 

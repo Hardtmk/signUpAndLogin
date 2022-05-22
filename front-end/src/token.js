@@ -2,7 +2,8 @@
 import { useState } from 'react'
 import axios from 'axios'
 import {useNavigate} from 'react-router-dom'
-import {useCookies} from 'react-cookie'
+
+
 
 
 
@@ -10,7 +11,7 @@ export default function Token({signUp,userRecord,setUserRecord}) {
 let [username, setUsername]=useState(null)
 let [password, setPassword]=useState(null)
 let [confirmPassword, setConfirmPassword]=useState(null)
-const [cookies, setCookie,removeCookie] = useCookies(null)
+
 
 const navigate = useNavigate()
 const handleClick=()=>{
@@ -31,14 +32,12 @@ const handleSubmit= async(e)=>{
   return    
   }
 // 這個應該是for登記用的吧
- const response =await axios.post("http://localhost:8000",{username,password})
+// 如果是signup, 就由signup這個網站傳輸數據
+// 如果是signup是false,就由login這個網站傳送數據
+ const response =await axios.post(`http://localhost:8000/${signUp? 'signup': 'login'}`,{username,password})
+//  console.log(response.data.username)//zz
  const success = response.status === 201
- if(success) navigate('/page')
- setCookie('AuthToken',response.data.token)
- setCookie('UserId',response.data.userId)
 
-
- window.location.reload()
   
 }catch(error){
   console.log(error)
