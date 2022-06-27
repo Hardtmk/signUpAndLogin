@@ -1,4 +1,4 @@
-// import { set } from 'mongoose'
+
 import { useState } from 'react'
 import axios from 'axios'
 import {useNavigate} from 'react-router-dom'
@@ -31,11 +31,7 @@ const handleSubmit= async(e)=>{
   if(signUp && (password!=confirmPassword)){
   return    
   }
-// 這個應該是for登記用的吧
-// 如果是signup, 就由signup這個網站傳輸數據
-// 如果是signup是false,就由login這個網站傳送數據
  const response =await axios.post(`http://localhost:8000/${signUp? 'signup': 'login'}`,{username,password})
-//  console.log(response.data.username)//zz
  const success = response.status === 201
 
   
