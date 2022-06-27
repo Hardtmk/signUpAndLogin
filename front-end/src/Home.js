@@ -1,16 +1,20 @@
 import  Token from './token'
 import { useState } from 'react'
 
+
 const Home= () => {
 
 const [signUp, setSignUp] = useState(true)
 const [userRecord, setUserRecord] = useState(false)
+
+
 
 const handleClick=()=>{
  setSignUp(false)
 setUserRecord(true)
 }
 const handleSecondClick=()=>{
+
  setUserRecord(true)
  setSignUp(true)
 }
