@@ -7,38 +7,11 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const {v4: uuidv4} = require('uuid')
 const cors = require('cors')
-const session = require('express-session')
-
-
 const app = express()
 app.use(express.urlencoded({extended: true}));
 app.use(express.json())
 app.use(cors())
 
-
-
-// 配置
-app.use(session({
-  secret: 'qf project',
-  resave: false,
-  saveUninitialized: true,
-  cookie: { maxAge:10000*10 }//指定會話的有效時長
-}))
-
-
-
-//登錄攔截
-app.get('/signup',function(req,res){
-  // res.send('hellooo')
-
-  var username=req.session.username
-    // res.send(username)
-    res.send('fdnjkfd')
-    // 爲什麽是undefined呢
-  console.log('session',username)
-
-
-})
 
 
 app.post('/signup',async(req,res)=>{
@@ -53,12 +26,15 @@ if(haveUsername){
 }
    const data = {
     username:username,
- password:hashedPassword
+ password:hashedPassword,
    }
 const insertData = await schema.create(data)
-// 就只會在8000/signup這個網址得到session 
- req.session.username=insertData.username
-    res.status(201).json(insertData)
+
+    const token = jwt.sign(insertData.toJSON(),username, {
+            expiresIn: 60 * 24
+        }) 
+
+    res.status(201).json({token,userID:insertData.id})
  }catch(error){
   console.log(error)
  }
@@ -66,16 +42,46 @@ const insertData = await schema.create(data)
 
 app.post('/login',async(req,res)=>{
   const {username,password}=req.body
+
   try{
-const haveUsername = await schema.findOne({haveUsername})
-// 應該就是password進行hash 之後再進行比較
+
+const haveUsername = await schema.findOne({username})
+
 const Rightpassword = await bcrypt.compare(password,haveUsername.password)
 
+if(haveUsername && Rightpassword){
+    const token = jwt.sign(haveUsername.toJSON(),username, {
+            expiresIn: 60 * 24
+        }) 
+        console.log('send')
+            res.status(201).json({token, userID: haveUsername.id})
+}
+
+
   }catch(error){
-console.log(error)
+next(error)
   }
 
 })
+
+app.patch('/:id',async(req,res,next)=>{
+
+     const { id} = req.params
+     console.log(id)
+  const {password}=req.body
+  try{
+      const hashedPassword = await bcrypt.hash(password,10)
+  const UpdatePassword = await schema.findOneAndUpdate({_id:id},{password:hashedPassword,
+  new: true,
+    runValidators: true,  
+  })
+  res.status(200).json({ UpdatePassword })
+  }catch(error){
+next(error)
+  }
+
+})
+
 
 const start = async () => {
   try {
@@ -88,8 +94,3 @@ const start = async () => {
   }
 };
 start()
-
-
-   // app.listen(port, () =>
-   //    console.log(`Server is listening on port ${port}...`)
-   //  );

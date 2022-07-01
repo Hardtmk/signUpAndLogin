@@ -1,6 +1,8 @@
 import  Token from './token'
 import { useState } from 'react'
-
+import { faComputer } from '@fortawesome/free-solid-svg-icons';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const Home= () => {
 
@@ -17,13 +19,13 @@ const handleSecondClick=()=>{
 
  setUserRecord(true)
  setSignUp(true)
+     document.querySelector('.startBtn').classList.add('hidden')
 }
 
 return (
  <div>
 <nav>
-  <h1>你好嗎</h1>
- <div className='logo'>logo</div>
+ <FontAwesomeIcon className='icon' icon={faComputer}></FontAwesomeIcon>
  <button
   className='login' 
   onClick={handleClick}
@@ -32,14 +34,16 @@ return (
    </button>
 </nav>
 
-<div>
+<div className='model'>
 <button
+className='startBtn'
  onClick={handleSecondClick}
  >
-  開始你的日記之旅吧
+SignUp
   </button>
 {userRecord && (
 <Token 
+className='token'
 setUserRecord={setUserRecord} 
 userRecord={userRecord} 
 signUp={signUp}/>

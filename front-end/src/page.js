@@ -14,15 +14,12 @@ const [changePassword, setChangePassword]=useState(false)
 const [password,setPassword]=useState(null)
 const [confirmPassword,setConfirmPassword]=useState(null)
 let navigate = useNavigate()
-    if(!cookies.AuthToken){
- navigate('/')
- window.location.reload()
-}
+
 console.log('userID='+cookies.userID)
 console.log('userID='+cookies.AuthToken)
 // 如何設置攔截功能呢？
 const logout=()=>{
-removeCookie('UserId',cookies.userID)
+removeCookie('Userid',cookies.Userid)
 removeCookie('AuthToken',cookies.AuthToken)
 navigate('/')
 window.location.reload()
@@ -56,12 +53,14 @@ const handleSubmit = async(e)=>{
         alert('密碼格式錯誤')
         return
     }
-
    try{
        
-  const response = await axios.patch(`http://localhost:8000/${cookies.userID}`,{password:password})
+  const response = await axios.patch(`http://localhost:8000/${cookies.Userid}`,{password:password})
+//   const response = await axios.patch(`http://localhost:8000/123`,{password:password})
+console.log(response.status)
 console.log(response)
 
+alert('change has been made')
       
    }catch(error){
        console.log(error)
@@ -70,28 +69,27 @@ console.log(response)
 
 
 return (
-<div>
+<div className='background'>
 <nav>
  <FontAwesomeIcon className='icon' icon={faComputer}></FontAwesomeIcon>
-   <h1>Welcome</h1>
  <button className='logout' onClick={logout}>logout</button>
  </nav>
 
-<div className='pageContainer'>
-    
-<button className='changePassword' onClick={handlePassword}>修改密碼</button>
-     
+
+<button className='changePassword' onClick={handlePassword}>Change Your Password</button>
+
+<div className='Pagemodel'>
 {
     changePassword && 
     
-        <form className='form' onSubmit={handleSubmit}>
+        <form className='token' onSubmit={handleSubmit}>
              <FontAwesomeIcon className='closeBtn'
       icon= {faXmark}onClick={handleClick}></FontAwesomeIcon>
          <input
                     type="password"
                     id="password"
                     name="password"
-                    placeholder="改變密碼"
+                    placeholder="change your password"
                     required={true}
                     onChange={(e) => setPassword(e.target.value)}
                 />
@@ -100,7 +98,7 @@ return (
                     type="confirmPassword"
                     id="confirmPassword"
                     name="confirmPassword"
-                    placeholder="確認改變密碼"
+                    placeholder="confirmed password"
                     required={true}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                 />
