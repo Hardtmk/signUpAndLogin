@@ -13,7 +13,6 @@ export default function Token({signUp,userRecord,setUserRecord}) {
 let [username, setUsername]=useState(null)
 let [password, setPassword]=useState(null)
 let [confirmPassword, setConfirmPassword]=useState(null)
-let [error, setError] = useState(null)
 const [ cookies, setCookie, removeCookie] = useCookies(null)
 
 
@@ -42,17 +41,18 @@ const handleSubmit= async(e)=>{
     }
 
  const response =await axios.post(`http://localhost:8000/${signUp? 'signup': 'login'}`,{username,password})
-console.log('noiossda')
+
  setCookie('AuthToken',response.data.token)
  setCookie('Userid',response.data.userID)
  console.log(response.data)
   const success = response.status === 201
 if(success){
+  alert(response.data.message)
 navigate('./page')
-}
      window.location.reload()
+}
 }catch(error){
-  console.log(error)
+alert(error.response.data)
 }
 }
 

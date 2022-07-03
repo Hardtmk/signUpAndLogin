@@ -1,22 +1,28 @@
+require('express-async-errors');
+require('dotenv').config();
 const express = require('express')
 const connectDB=require('./db/connect')
 const schema = require('./model/schema')
-require('dotenv').config();
+
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const {v4: uuidv4} = require('uuid')
 const cors = require('cors')
 const app = express()
+const { BadRequestError } = require('./errors')
+const errorHandlerMiddleware = require('./middleware/error-handler');
 app.use(express.urlencoded({extended: true}));
 app.use(express.json())
 app.use(cors())
 
 
+app.use(errorHandlerMiddleware);
 
 app.post('/signup',async(req,res)=>{
   const {username,password}=req.body
   const hashedPassword = await bcrypt.hash(password,10)
   const generatedUserId = uuidv4()
+
  try{
 const haveUsername = await schema.findOne({username})
 
@@ -33,7 +39,7 @@ const insertData = await schema.create(data)
             expiresIn: 60 * 24
         }) 
 
-    res.status(201).json({token,userID:insertData.id})
+    res.status(201).json({token,userID:insertData.id,message:username+' account have created'})
  }catch(error){
   console.log(error)
  }
@@ -42,23 +48,33 @@ const insertData = await schema.create(data)
 app.post('/login',async(req,res)=>{
   const {username,password}=req.body
 
+
+
   try{
 
 const haveUsername = await schema.findOne({username})
-
+  if(!haveUsername){
+        res.status(400).json('do not have username')
+         throw new BadRequestError('do not have username')
+}
 const Rightpassword = await bcrypt.compare(password,haveUsername.password)
+
+if(!Rightpassword){
+      res.status(400).json('password and email do not match')
+         throw new BadRequestError('password and email do not match')
+  }
 
 if(haveUsername && Rightpassword){
     const token = jwt.sign(haveUsername.toJSON(),username, {
             expiresIn: 60 * 24
         }) 
-        console.log('send')
-            res.status(201).json({token, userID: haveUsername.id})
+  
+            res.status(201).json({token, userID: haveUsername.id,message:username+' have successfully logged in'})
 }
 
 
   }catch(error){
-next(error)
+console.log(error)
   }
 
 })
@@ -80,6 +96,7 @@ next(error)
   }
 
 })
+
 
 
 const start = async () => {

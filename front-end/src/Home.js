@@ -14,6 +14,7 @@ const [userRecord, setUserRecord] = useState(false)
 const handleClick=()=>{
  setSignUp(false)
 setUserRecord(true)
+       document.querySelector('.startBtn').classList.add('hidden')
 }
 const handleSecondClick=()=>{
 
