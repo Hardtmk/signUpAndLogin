@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const LoginSchema = new mongoose.Schema({
   username: {
@@ -9,7 +9,7 @@ const LoginSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-  }
-})
+  },
+});
 // schema就是等於一個model
-module.exports = mongoose.model('schema', LoginSchema)
+module.exports = mongoose.model('schema', LoginSchema);
